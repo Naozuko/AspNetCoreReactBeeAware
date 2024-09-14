@@ -1,0 +1,330 @@
+.apiaries-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.apiaries-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+    .apiaries-header h2 {
+        margin: 0;
+        color: #333;
+    }
+
+.btn {
+    padding: 10px 20px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary {
+    background-color: #007bff;
+    color: white;
+}
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+    }
+
+.btn-secondary {
+    background-color: #6c757d;
+    color: white;
+}
+
+    .btn-secondary:hover {
+        background-color: #545b62;
+    }
+
+.btn-danger {
+    background-color: #dc3545;
+    color: white;
+}
+
+    .btn-danger:hover {
+        background-color: #c82333;
+    }
+
+.apiaries-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff8dc;
+}
+
+    .apiaries-table th,
+    .apiaries-table td {
+        padding: 12px;
+        text-align: left;
+        border: 1px solid #deb887;
+    }
+
+    .apiaries-table th {
+        background-color: #ffe4b5;
+        font-weight: bold;
+    }
+
+    .apiaries-table tr:nth-child(even) {
+        background-color: #fafad2;
+    }
+
+    .apiaries-table tr:hover {
+        background-color: #f0e68c;
+        cursor: pointer;
+    }
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+}
+
+    .pagination button {
+        padding: 5px 10px;
+        margin: 0 5px;
+        border: 1px solid #deb887;
+        background-color: #fff8dc;
+        cursor: pointer;
+    }
+
+        .pagination button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+    .pagination span {
+        margin: 0 10px;
+    }
+
+.loading, .error {
+    text-align: center;
+    padding: 20px;
+    font-size: 18px;
+}
+
+.error {
+    color: #dc3545;
+}
+
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    width: 80%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+    .modal-content h2 {
+        margin-top: 0;
+        color: #333;
+    }
+
+    .modal-content form {
+        display: flex;
+        flex-direction: column;
+    }
+
+.form-row {
+    margin-bottom: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 10px;
+}
+
+    .form-group label {
+        margin-bottom: 5px;
+        font-weight: bold;
+    }
+
+    .form-group input,
+    .form-group textarea {
+        padding: 8px;
+        border: 1px solid #deb887;
+        border-radius: 4px;
+        font-size: 14px;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+        resize: vertical;
+    }
+
+.hives-container {
+    border: 1px solid #deb887;
+    padding: 10px;
+    border-radius: 4px;
+}
+
+.hive-input {
+    display: flex;
+    margin-bottom: 10px;
+}
+
+    .hive-input input {
+        flex: 1;
+        margin-right: 10px;
+    }
+
+.add-hive-btn {
+    background-color: #28a745;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+    .button-group button {
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+    }
+
+        .button-group button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+        }
+
+    .button-group .btn-danger {
+        background-color: #dc3545;
+        color: white;
+    }
+
+/* Styles for the Apiary Detail Modal */
+.apiary-detail {
+    width: 90%;
+    max-width: 1200px;
+    height: 80vh;
+    overflow-y: auto;
+}
+
+.apiary-detail-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.hives-section {
+    grid-column: 1 / -1;
+}
+
+    .hives-section table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .hives-section th,
+    .hives-section td {
+        border: 1px solid #ddd;
+        padding: 8px;
+        text-align: left;
+    }
+
+.apiary-info,
+.images-section,
+.map-section {
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.image-placeholder,
+.map-placeholder {
+    width: 100%;
+    height: 200px;
+    background-color: #ddd;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.image-navigation {
+    text-align: center;
+    margin-top: 10px;
+}
+
+.edit-btn {
+    background-color: #ffc107;
+    color: #212529;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+.close-btn {
+    background-color: #6c757d;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .apiary-detail-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 15px;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+    .hive-input {
+        flex-direction: column;
+    }
+
+        .hive-input input {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+        .button-group button {
+            margin-bottom: 10px;
+        }
+}
