@@ -126,28 +126,28 @@
     z-index: 1000;
 }
 
-.modal-content {
-    background-color: #fff;
+.modal-content-apiaries {
+    background-color: #FFFFE0;
     padding: 20px;
     border-radius: 5px;
     width: 80%;
-    max-width: 600px;
+    max-width: 1200px;
     max-height: 80vh;
     overflow-y: auto;
 }
 
-    .modal-content h2 {
-        margin-top: 0;
-        color: #333;
-    }
+.modal-content h2 {
+    margin-top: 0;
+    color: #333;
+}
 
-    .modal-content form {
-        display: flex;
-        flex-direction: column;
-    }
+.modal-content form {
+    display: flex;
+    flex-direction: column;
+}
 
 .form-row {
-    margin-bottom: 15px;
+    margin-bottom: 10px;
 }
 
 .form-group {
@@ -167,6 +167,7 @@
         border: 1px solid #deb887;
         border-radius: 4px;
         font-size: 14px;
+        min-width: 75px
     }
 
     .form-group textarea {
@@ -225,9 +226,9 @@
 
 /* Styles for the Apiary Detail Modal */
 .apiary-detail {
-    width: 90%;
-    max-width: 1200px;
-    height: 80vh;
+    width: 80%;
+    max-width: 800px;
+    height: 85vh;
     overflow-y: auto;
 }
 
@@ -236,6 +237,19 @@
     grid-template-columns: 1fr 1fr;
     grid-gap: 20px;
 }
+
+.header {
+    background-color: #FFFFE0;
+    padding: 20px;
+    text-align: center;
+}
+
+.footer {
+    background-color: #FFFFE0;
+    text-align: center;
+    padding: 10px;
+}
+
 
 .hives-section {
     grid-column: 1 / -1;
@@ -253,13 +267,45 @@
         text-align: left;
     }
 
-.apiary-info,
-.images-section,
-.map-section {
-    background-color: #f9f9f9;
+.apiary-hive {
+    background-color: #FFFFE0;
     padding: 15px;
     border-radius: 5px;
 }
+
+.apiary-info,
+.images-section,
+.map-section {
+    background-color: #FFFFE0;
+    padding: 15px;
+    border-radius: 5px;
+    max-width: 800px;
+}
+
+
+.form-group-name,
+.form-group-address,
+.form-group-contactInfo {
+    background-color: #FFFFE0;
+    display: flex;
+    margin-bottom: 10px;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.form-group-hive,
+.form-group-notes,
+.form-group-descriptio {
+    background-color: #FFFFE0;
+    padding: 15px;
+    border-radius: 5px;
+    max-width: 800px;
+    width: auto;
+    min-height: auto;
+    height: auto;
+}
+
+
 
 .image-placeholder,
 .map-placeholder {
@@ -299,17 +345,149 @@
 /* Responsive adjustments */
 @media (max-width: 768px) {
     .apiary-detail-grid {
+        display: grid;
         grid-template-columns: 1fr;
+        grid-template-rows: auto;
     }
 
-    .modal-content {
-        width: 95%;
+    .modal-content-apiaries {
+        width: 100%;
         padding: 15px;
     }
 
     .form-row {
         flex-direction: column;
     }
+
+    .hive-input {
+        flex-direction: column;
+
+    }
+
+        .hive-input input {
+            margin-right: 0;
+            margin-bottom: 5px;
+        }
+
+    .button-group {
+        flex-direction: column;
+    }
+
+        .button-group button {
+            margin-bottom: 10px;
+        }
+}
+
+@media (min-width: 768px) {
+    .apiary-detail-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
+    }
+
+    .modal-content-apiaries {
+        width: 100%;
+        padding: 15px;
+    }
+
+    .apiary-detail {
+        max-width: 1200px
+    }
+
+
+    .hives-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-auto-columns: auto auto;
+        grid-template-rows: auto;
+        grid-column-gap: 5px;
+        grid-template-areas:
+            "header header"
+            "apiary-hive  apiary-info "
+            "images-section  map-section "
+            "footer footer ";
+    }
+
+    .from-showadd {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-columns: auto auto;
+        grid-template-rows: auto;
+        grid-column-gap: 5px;
+        grid-template-areas:
+            "header header header"
+            "form-group-name form-group-address form-group-contactInfo"
+            "form-group-hive form-group-notes form-group-descriptio"
+            "footer footer footer";
+    }
+
+    .form-group-hive,
+    .form-group-notes,
+    .form-group-descriptio {
+        min-height: 300px;
+        min-width:200px;
+        height: auto;
+
+    }
+
+
+    .header {
+        grid-area: header;
+    }
+
+    .footer {
+        grid-area: footer;
+    }
+
+    .apiary-hive {
+        grid-area: apiary-hive;
+    }
+
+    .apiary-info {
+        grid-area: apiary-info;
+    }
+
+    .images-section {
+        grid-area: images-section;
+    }
+
+    .map-section {
+        grid-area: map-section;
+    }
+
+    .form-row {
+        flex-direction: column;
+    }
+
+
+    form-group-name {
+        grid-area: form-group-name;
+    }
+
+    form-group-address {
+        grid-area: form-group-address;
+    }
+
+    form-group-contactInfo {
+        grid-area: form-group-contactInfo;
+    }
+
+    form-group-notes {
+        grid-area: form-group-notes;
+    }
+
+    form-group-descriptio {
+        grid-area: form-group-descriptio;
+    }
+
+    form-group-hive {
+        grid-area: form-group-hive;
+    }
+
+
+
+
+
 
     .hive-input {
         flex-direction: column;
