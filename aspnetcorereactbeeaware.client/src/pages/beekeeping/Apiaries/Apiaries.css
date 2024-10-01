@@ -562,9 +562,11 @@
 
     .button-group {
         flex-direction: column;
+        
     }
 
         .button-group button {
             margin-bottom: 10px;
+           
         }
 }

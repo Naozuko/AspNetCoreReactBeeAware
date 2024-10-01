@@ -353,10 +353,10 @@ const Inspections: React.FC = () => {
             <div className="grid-item calendar-container">
                 <div className="inspection-data">
                     <h4>Select Date & Time</h4>
-                    <Calendar
+                    <div className="calendar"><Calendar
                         onChange={handleDateChange}
                         value={selectedDate}
-                    />
+                    /></div>
                     <button className="inspection-button" onClick={handleInspectionClick}>INSPECTION</button>
                 </div>
             </div>
