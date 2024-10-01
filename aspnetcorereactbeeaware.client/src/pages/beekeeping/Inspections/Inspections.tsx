@@ -645,14 +645,19 @@ const Inspections: React.FC = () => {
                                                         </div>
 
                                                     )}
+                                                    <div className="form-group-add">
+                                                        <div className="button-group">
+                                                            <button type="button" onClick={handleAddDisease}>Add More</button>
+                                                        </div>
+
+                                                    </div>
                                                 </div>
-                                            
+
                                             </div>
                                         ))}
 
                                         <div className="footer">
                                             <div className="button-group">
-                                                <button type="button" onClick={handleAddDisease}>Add More</button>
                                                 <button type="button" onClick={handleCloseDiseasesModal}>CANCEL</button>
                                                 <button type="submit">SUBMIT</button>
                                             </div>

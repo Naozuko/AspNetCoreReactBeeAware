@@ -42,11 +42,10 @@ const ApiaryDetailModal: React.FC<{ apiary: Apiary | null, onClose: () => void }
                 <div className="apiary-detail-grid">
                     <div className="hives-section">
 
-                        <div className="header">
+                        <div className="header-A">
                             <h3>Hives</h3>
-                            <button className="edit-btn">Edit</button>
                         </div>
-
+                        <div className="header-B"><h3><button className="edit-btn" >Edit</button></h3></div>
 
 
                         <div className="apiary-hive">
@@ -330,18 +329,11 @@ const Apiaries: React.FC = () => {
             {showAddModal && (
                 <div className="modal-overlay">
                     <div className="modal-content-apiaries">
-                        <div className="from-showadd">
-                            <div className="header">
-                                <h2>Create New Apiary</h2>
-                            </div>
-                        </div>
-
                         <form onSubmit={handleCreateApiary}>
                             <div className="from-showadd">
                                 <div className="form-group-name">
                                     <div className="form-row">
                                         <div className="form-group">
-
                                             <label htmlFor="apiaryName">Name of apiary</label>
                                             <input
                                                 type="text"
@@ -354,6 +346,36 @@ const Apiaries: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
+
+                                <div className="form-group-notes">
+                                    <div className="form-row">
+                                        <div className="form-group">
+                                            <label htmlFor="notes">Notes</label>
+                                            <textarea
+                                                id="notes"
+                                                name="notes"
+                                                value={newApiary.notes}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+
+                                
+
+                                <div className="form-group-descriptio">
+                                    <div className="form-group">
+
+                                        <label htmlFor="description">Description</label>
+                                        <textarea
+                                            id="description"
+                                            name="description"
+                                            value={newApiary.description}
+                                            onChange={handleInputChange}
+                                        />
+                                    </div>
+                                </div>
+
                                 <div className="form-group-address">
                                     <div className="form-row">
                                         <div className="form-group">
@@ -385,33 +407,25 @@ const Apiaries: React.FC = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="form-group-notes">
-                                    <div className="form-row">
-                                        <div className="form-group">
 
-                                            <label htmlFor="notes">Notes</label>
-                                            <textarea
-                                                id="notes"
-                                                name="notes"
-                                                value={newApiary.notes}
-                                                onChange={handleInputChange}
-                                            />
-                                        </div>
+                                <div className="images-section">
+                                    <h3>Images</h3>
+                                    <div className="image-placeholder">
+                                        <img src="/path/to/placeholder/image.jpg" alt="Apiary" />
+                                    </div>
+                                    <div className="image-navigation">
+                                        <span>{'< 1 >'}</span>
+                                    </div>
+                                </div>
+                                <div className="map-section">
+                                    <h3>Map</h3>
+                                    <div className="map-placeholder">
+                                        <img src="/path/to/map/image.jpg" alt="Location Map" />
                                     </div>
                                 </div>
 
-                                <div className="form-group-descriptio">
-                                    <div className="form-group">
 
-                                        <label htmlFor="description">Description</label>
-                                        <textarea
-                                            id="description"
-                                            name="description"
-                                            value={newApiary.description}
-                                            onChange={handleInputChange}
-                                        />
-                                    </div>
-                                </div>
+                                <div className="a"></div>
 
                                 <div className="form-group-hive">
                                     <div className="form-row">
@@ -440,12 +454,13 @@ const Apiaries: React.FC = () => {
                                     </div>
                                 </div>
 
-                                <div className="footer">
+                                <div className="showAddButton">
                                     <div className="button-group">
                                         <button type="button" onClick={() => setShowAddModal(false)}>Cancel</button>
                                         <button type="submit">Create</button>
                                     </div>
                                 </div>
+
                             </div>
                         </form>
                     </div>
@@ -470,80 +485,125 @@ const Apiaries: React.FC = () => {
                             <form onSubmit={(e) => {
                                 e.preventDefault();
                                 handleUpdateApiary(editingApiary);
-                            }}>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="apiaryName">Name of apiary</label>
-                                        <input
-                                            type="text"
-                                            id="apiaryName"
-                                            name="apiaryName"
-                                            value={editingApiary.apiaryName}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
+                            }}><div className="from-edit">
+                                    <div className="form-group-name">
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="apiaryName">Name of apiary</label>
+                                                <input
+                                                    type="text"
+                                                    id="apiaryName"
+                                                    name="apiaryName"
+                                                    value={editingApiary.apiaryName}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="address">Address</label>
-                                        <input
-                                            type="text"
-                                            id="address"
-                                            name="address"
-                                            value={editingApiary.address}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
+
+                                    <div className="form-group-notes">
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="notes">Notes</label>
+                                                <textarea
+                                                    id="notes"
+                                                    name="notes"
+                                                    value={editingApiary.notes || ''}
+                                                    onChange={handleInputChange}
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="contactInfo">Property contact number & name</label>
-                                        <input
-                                            type="text"
-                                            id="contactInfo"
-                                            name="contactInfo"
-                                            value={editingApiary.contactInfo}
-                                            onChange={handleInputChange}
-                                            required
-                                        />
+
+                                    <div className="form-group-descriptio">
+                                        <div className="form-group">
+                                            <label htmlFor="description">Description</label>
+                                            <textarea
+                                                id="description"
+                                                name="description"
+                                                value={editingApiary.description || ''}
+                                                onChange={handleInputChange}
+                                            />
+                                        </div>
                                     </div>
-                                </div>
-                                <div className="form-row">
-                                    <div className="form-group">
-                                        <label htmlFor="notes">Notes</label>
-                                        <textarea
-                                            id="notes"
-                                            name="notes"
-                                            value={editingApiary.notes || ''}
-                                            onChange={handleInputChange}
-                                        />
+
+                                    <div className="form-group-address">
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="address">Address</label>
+                                                <input
+                                                    type="text"
+                                                    id="address"
+                                                    name="address"
+                                                    value={editingApiary.address}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="form-group">
-                                        <label htmlFor="description">Description</label>
-                                        <textarea
-                                            id="description"
-                                            name="description"
-                                            value={editingApiary.description || ''}
-                                            onChange={handleInputChange}
-                                        />
+
+                                    <div className="form-group-contactInfo">
+                                        <div className="form-row">
+                                            <div className="form-group">
+                                                <label htmlFor="contactInfo">Property contact number & name</label>
+                                                <input
+                                                    type="text"
+                                                    id="contactInfo"
+                                                    name="contactInfo"
+                                                    value={editingApiary.contactInfo}
+                                                    onChange={handleInputChange}
+                                                    required
+                                                />
+                                            </div>
+                                        </div>
                                     </div>
+
+                                    <div className="a"></div>
+
+                                    <div className="images-section">
+                                        <h3>Images</h3>
+                                        <div className="image-placeholder">
+                                            <img src="/path/to/placeholder/image.jpg" alt="Apiary" />
+                                        </div>
+                                        <div className="image-navigation">
+                                            <span>{'< 1 >'}</span>
+                                        </div>
+                                    </div>
+
+                                    <div className="map-section">
+                                        <h3>Map</h3>
+                                        <div className="map-placeholder">
+                                            <img src="/path/to/map/image.jpg" alt="Location Map" />
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div className="showAddButton">
+                                        <div className="button-group">
+                                            <button type="button" onClick={() => setEditingApiary(null)}>Cancel</button>
+                                            <button type="submit">Update</button>
+                                            <button
+                                                type="button"
+                                                className="btn-danger"
+                                                onClick={() => handleDeleteApiary(editingApiary.apiaryId)}
+                                            >
+                                                Delete
+                                            </button>
+
+                                        </div>
+                                    </div>
+
                                 </div>
-                                <div className="button-group">
-                                    <button type="button" onClick={() => setEditingApiary(null)}>Cancel</button>
-                                    <button type="submit">Update</button>
-                                    <button
-                                        type="button"
-                                        className="btn-danger"
-                                        onClick={() => handleDeleteApiary(editingApiary.apiaryId)}
-                                    >
-                                        Delete
-                                    </button>
-                                </div>
+
                             </form>
-                        </div>
-                    </div>
+
+                        </div >
+                    </div >
+
                 )
             }
         </div >

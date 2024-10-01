@@ -132,7 +132,7 @@
     border-radius: 5px;
     width: 80%;
     max-width: 1200px;
-    max-height: 80vh;
+    max-height: 88vh;
     overflow-y: auto;
 }
 
@@ -167,12 +167,14 @@
         border: 1px solid #deb887;
         border-radius: 4px;
         font-size: 14px;
-        min-width: 75px
+        min-width: 75px;
+        
     }
 
     .form-group textarea {
         min-height: 100px;
         resize: vertical;
+        height: 200%;
     }
 
 .hives-container {
@@ -238,10 +240,16 @@
     grid-gap: 20px;
 }
 
-.header {
+.header-A {
     background-color: #FFFFE0;
     padding: 20px;
-    text-align: center;
+    text-align: left;
+}
+
+.header-B {
+    text-align: right;
+    background-color: #FFFFE0;
+    padding: 20px;
 }
 
 .footer {
@@ -293,18 +301,42 @@
     border-radius: 5px;
 }
 
-.form-group-hive,
+.form-group-hive {
+    background-color: #FFFFE0;
+    padding: 15px;
+    border-radius: 5px;
+    max-width: 800px;
+    width: auto;
+    /*min-height: auto;*/
+    height: auto;
+}
+
 .form-group-notes,
 .form-group-descriptio {
     background-color: #FFFFE0;
     padding: 15px;
     border-radius: 5px;
     max-width: 800px;
+    max-height: 800px;
     width: auto;
-    min-height: auto;
+    /*min-height: auto;*/
     height: auto;
+    min-height: auto;
+    min-width: 200px;
 }
 
+.showAddButton {
+    width: auto;
+    height: auto;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.a {
+    display: block;
+    max-width: 300px;
+    max-height: 600px;
+}
 
 
 .image-placeholder,
@@ -361,7 +393,6 @@
 
     .hive-input {
         flex-direction: column;
-
     }
 
         .hive-input input {
@@ -381,7 +412,7 @@
 @media (min-width: 768px) {
     .apiary-detail-grid {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr;
         grid-template-rows: auto;
     }
 
@@ -397,15 +428,15 @@
 
     .hives-section {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: 1fr 1fr 1fr;
         grid-auto-columns: auto auto;
         grid-template-rows: auto;
         grid-column-gap: 5px;
         grid-template-areas:
-            "header header"
-            "apiary-hive  apiary-info "
-            "images-section  map-section "
-            "footer footer ";
+            "header-A header-A header-B"
+            "apiary-hive  apiary-info images-section"
+            "apiary-hive map-section  map-section "
+            "footer footer footer";
     }
 
     .from-showadd {
@@ -415,28 +446,63 @@
         grid-template-rows: auto;
         grid-column-gap: 5px;
         grid-template-areas:
-            "header header header"
-            "form-group-name form-group-address form-group-contactInfo"
-            "form-group-hive form-group-notes form-group-descriptio"
-            "footer footer footer";
+            "form-group-name         form-group-notes form-group-descriptio"
+            "form-group-address      a a"
+            "form-group-contactInfo  a a"
+            "form-group-hive         map-section images-section"
+            "showAddButton           map-section images-section";
     }
 
-    .form-group-hive,
+    .from-edit {
+        display: grid;
+        grid-template-columns: 1fr 1fr 1fr;
+        grid-auto-columns: auto auto;
+        grid-template-rows: auto;
+        grid-column-gap: 5px;
+        grid-template-areas:
+            "form-group-name         form-group-notes form-group-descriptio"
+            "form-group-address      a a"
+            "form-group-contactInfo  map-section images-section"
+            "showAddButton           map-section images-section";
+    }
+
     .form-group-notes,
     .form-group-descriptio {
-        min-height: 300px;
-        min-width:200px;
+        min-height: auto;
+        min-width: 200px;
         height: auto;
-
     }
 
 
+    .a {
+        line-height: 100%;
+        padding: 15px;
+        height: auto;
+        width: auto;
+    }
+
+    .a {
+        grid-area: a;
+    }
+
+    .header-A {
+        grid-area: header-A;
+    }
+
+    .header-B {
+        grid-area: header-B;
+    }
+
     .header {
-        grid-area: header;
+        grid-area: header-A;
     }
 
     .footer {
         grid-area: footer;
+    }
+
+    .showAddButton {
+        grid-area: showAddButton;
     }
 
     .apiary-hive {
@@ -483,10 +549,6 @@
     form-group-hive {
         grid-area: form-group-hive;
     }
-
-
-
-
 
 
     .hive-input {
