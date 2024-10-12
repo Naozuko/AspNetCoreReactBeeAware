@@ -117,7 +117,7 @@
 }
 
 .inspection-button {
-    width: 100%;
+    width: auto;
     padding: 10px;
     background-color: #4CAF50;
     color: white;
@@ -194,19 +194,35 @@
         resize: vertical;
     }
 
+
+
+.button-title {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+    display: block;
+    width: auto;
+    text-align: end;
+}
+
+
 .button-group {
     display: flex;
     justify-content: space-between;
-    margin-top: 20px;
+    margin-top: 2px;
     display: block;
+    width: auto;
+    text-align: center;
 }
 
     .button-group button {
-        padding: 10px 20px;
+        padding: 10px 10px;
         margin-left: 10px;
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        background-color: #28a745;
+        color: white;
     }
 
         .button-group button:first-child {
@@ -346,7 +362,10 @@
     .react-calendar__tile {
         padding: 1px;
     }
-
+    .react-calendar__tile {
+        max-width: 35px;
+        line-height: 15px;
+    }
 
     .from-showInspect {
         display: grid;

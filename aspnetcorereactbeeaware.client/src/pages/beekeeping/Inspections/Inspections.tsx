@@ -46,6 +46,7 @@ const Inspections: React.FC = () => {
     const [selectedHive, setSelectedHive] = useState<Hive | null>(null);
     const [inspections, setInspections] = useState<Inspection[]>([]);
     const [diseases, setDiseases] = useState<Disease[]>([]);
+    const [photography, setPhotography] = useState<Photography[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [currentPage, setCurrentPage] = useState(1);
     const [totalHives, setTotalHives] = useState(0);
@@ -56,8 +57,10 @@ const Inspections: React.FC = () => {
     // New state for modals
     const [showInspectionModal, setShowInspectionModal] = useState(false);
     const [showDiseasesModal, setShowDiseasesModal] = useState(false);
+    const [showPhotographyModal, setShowPhotographyModal] = useState(false);
     const [newInspection, setNewInspection] = useState<Partial<Inspection>>({});
     const [newDiseases, setNewDiseases] = useState<Partial<Disease>[]>([{}]);
+    const [newPhotography, setNewPhotography] = useState<Partial<Photography>[]>([{}]);
     const [lastAddedInspectionId, setLastAddedInspectionId] = useState<number | null>(null);
 
     useEffect(() => {
@@ -191,9 +194,28 @@ const Inspections: React.FC = () => {
         }
     };
 
-    const handleBackInspectionModal = () => {
+
+
+    const handleGoInspectionModal_D = () => {
+        setShowInspectionModal(false);
+        setShowDiseasesModal(true);
+        setShowPhotographyModal(false);
+    };
+
+    const handleGoInspectionModal_P = () => {
+        setShowInspectionModal(false);
+        setShowPhotographyModal(true);
+        setShowDiseasesModal(false);
+    };
+
+    const handleBackInspectionModal_D = () => {
         setShowInspectionModal(true);
         setShowDiseasesModal(false);
+    };
+
+    const handleBackInspectionModal_P = () => {
+        setShowInspectionModal(true);
+        setShowPhotographyModal(false);
     };
 
 
@@ -201,6 +223,17 @@ const Inspections: React.FC = () => {
         setShowInspectionModal(false);
         setNewInspection({});
     };
+
+    const handleCloseInspectionModal_P = () => {
+        setShowPhotographyModal(false);
+        setNewInspection({});
+    };
+
+    const handleCloseInspectionModal_D = () => {
+        setShowDiseasesModal(false);
+        setNewInspection({});
+    };
+
 
     const handleInspectionInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
@@ -223,6 +256,7 @@ const Inspections: React.FC = () => {
                 setLastAddedInspectionId(addedInspection.inspectionId);
                 setShowInspectionModal(false);
                 setShowDiseasesModal(true);
+                setShowPhotographyModal(true);
                 if (selectedHive) {
                     fetchInspections(selectedHive.hiveId, selectedDate);
                 }
@@ -238,6 +272,11 @@ const Inspections: React.FC = () => {
     const handleCloseDiseasesModal = () => {
         setShowDiseasesModal(false);
         setNewDiseases([{}]);
+    };
+
+    const handleClosePhotographyModal = () => {
+        setShowPhotographyModal(false);
+        setNewPhotography([{}]);
     };
 
     const handleDiseaseInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -368,7 +407,10 @@ const Inspections: React.FC = () => {
                                 onChange={handleDateChange}
                                 value={selectedDate}
                             /></div>
-                        <button className="inspection-button" onClick={handleInspectionClick}>INSPECTION</button>
+                        <div className="button-group">
+                            <button className="inspection-button" onClick={handleInspectionClick}>View</button>
+                            <button className="inspection-button" onClick={handleInspectionClick}>Create </button>
+                        </div>
                     </div>
 
                 </div>
@@ -378,14 +420,21 @@ const Inspections: React.FC = () => {
 
             <div className="grid-item ">
 
-                    <h4>Flowering right now</h4>
+                <h4>Flowering</h4>
 
             </div>
 
 
 
             <div className="grid-item inspection-details">
-                <h4>{selectedHive ? `${selectedHive.hiveNumber} Inspection Summary` : 'Select a hive'}</h4>
+                <div >
+                    <h4>{selectedHive ? `${selectedHive.hiveNumber} Inspection Summary` : 'Select a hive'}</h4>
+                    <div className="button-group">
+                        <button className="inspection-button" onClick={handleInspectionClick}>Last</button>
+                        <button className="inspection-button" onClick={handleInspectionClick}>Next</button>
+                    </div>
+                </div>
+
                 {selectedHive && inspections.length > 0 && (
                     <div>
                         <p>Last Inspection: {new Date(inspections[0].inspectionDate).toLocaleDateString()}</p>
@@ -584,7 +633,9 @@ const Inspections: React.FC = () => {
                                 <div className="footer">
                                     <div className="button-group">
                                         <button type="button" onClick={handleCloseInspectionModal}>CANCEL</button>
-                                        <button type="submit">NEXT</button>
+                                        <button type="button" onClick={handleGoInspectionModal_D}>Disease</button>
+                                        <button type="button" onClick={handleGoInspectionModal_P}>Photography</button>
+                                        <button type="submit">SUBMIT</button>
                                     </div>
                                 </div>
                             </div>
@@ -681,8 +732,48 @@ const Inspections: React.FC = () => {
 
                                         <div className="footer">
                                             <div className="button-group">
-                                                <button type="button" onClick={handleBackInspectionModal}>BACK</button>
-                                                <button type="button" onClick={handleCloseDiseasesModal}>CANCEL</button>
+                                                <button type="button" onClick={handleCloseInspectionModal_D}>CANCEL</button>
+                                                <button type="button" onClick={handleBackInspectionModal_D}>Inspection</button>
+                                                <button type="button" onClick={handleGoInspectionModal_P}>Photography </button>
+                                                <button type="submit">SUBMIT</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                )
+            }
+
+            {/*Photography*/
+                showPhotographyModal && (
+                    <div className="modal">
+                        <div className="modal-content-inspect">
+                            <div className="header">
+                                <h2>HIVE #{selectedHive?.hiveNumber} DISEASES</h2>
+                            </div>
+                            <div className="from-showDis">
+                                <div className="form-row">
+                                    <form onSubmit={handleSubmitDiseases}>
+                                        {newDiseases.map((disease, index) => (
+                                            <div key={index} className="disease-entry">
+                                                <div className="from-addDis">
+
+
+
+                                                </div>
+
+                                            </div>
+                                        ))}
+
+                                        <div className="footer">
+                                            <div className="button-group">
+                                                <button type="button" onClick={handleCloseInspectionModal_P}>CANCEL</button>
+                                                <button type="button" onClick={handleBackInspectionModal_P}>Inspection</button>
+                                                <button type="button" onClick={handleGoInspectionModal_D}>Disease</button>
                                                 <button type="submit">SUBMIT</button>
                                             </div>
                                         </div>
