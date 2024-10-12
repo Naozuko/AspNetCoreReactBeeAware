@@ -191,6 +191,12 @@ const Inspections: React.FC = () => {
         }
     };
 
+    const handleBackInspectionModal = () => {
+        setShowInspectionModal(true);
+        setShowDiseasesModal(false);
+    };
+
+
     const handleCloseInspectionModal = () => {
         setShowInspectionModal(false);
         setNewInspection({});
@@ -345,21 +351,38 @@ const Inspections: React.FC = () => {
                 </div>
             </div>
 
-            <div className="grid-item map-container">
-                <h4>Three Bee Apiaries</h4>
-                <p>Map placeholder - Apiary locations would be shown here</p>
-            </div>
 
-            <div className="grid-item calendar-container">
-                <div className="inspection-data">
-                    <h4>Select Date & Time</h4>
-                    <div className="calendar"><Calendar
-                        onChange={handleDateChange}
-                        value={selectedDate}
-                    /></div>
-                    <button className="inspection-button" onClick={handleInspectionClick}>INSPECTION</button>
+
+            <div className="grid-item map-container">
+                <div className="grid-map-clander">
+                    <div className="grid-Map-location">
+                        <h4>Three Bee Apiaries</h4>
+                        <p>Map placeholder - Apiary locations would be shown here</p>
+                    </div>
+
+                    <div className="grid-inspection-location">
+
+                        <h4>Select Date & Time</h4>
+                        <div className="calendar">
+                            <Calendar styles="width=50%"
+                                onChange={handleDateChange}
+                                value={selectedDate}
+                            /></div>
+                        <button className="inspection-button" onClick={handleInspectionClick}>INSPECTION</button>
+                    </div>
+
                 </div>
             </div>
+
+
+
+            <div className="grid-item ">
+
+                    <h4>Flowering right now</h4>
+
+            </div>
+
+
 
             <div className="grid-item inspection-details">
                 <h4>{selectedHive ? `${selectedHive.hiveNumber} Inspection Summary` : 'Select a hive'}</h4>
@@ -658,6 +681,7 @@ const Inspections: React.FC = () => {
 
                                         <div className="footer">
                                             <div className="button-group">
+                                                <button type="button" onClick={handleBackInspectionModal}>BACK</button>
                                                 <button type="button" onClick={handleCloseDiseasesModal}>CANCEL</button>
                                                 <button type="submit">SUBMIT</button>
                                             </div>
