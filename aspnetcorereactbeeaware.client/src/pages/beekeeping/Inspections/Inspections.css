@@ -8,59 +8,54 @@
     min-height: 100vh;
 }
 
-.grid-item {
+.inspection-grid-item {
     background-color: #FFF8DC;
     border: 1px solid #DEB887;
     padding: 20px;
     border-radius: 5px;
 }
 
-    .grid-item h4 {
-        margin-top: 0;
-        margin-bottom: 15px;
-        color: #333;
-    }
+.inspection-grid-item h4 {
+    margin-top: 0;
+    margin-bottom: 15px;
+    color: #333;
+}
 
-    /* Left column, top (Apiary selection and hive list) */
-    .grid-item:nth-child(1) {
-        grid-column: 1 / 2;
-        grid-row: 1 / 2;
-        height: 300px;
-        overflow-y: auto;
-    }
+.inspection-grid-item:nth-child(1) {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+    height: 300px;
+    overflow-y: auto;
+}
 
-    /* Right column, top (Map) */
-    .grid-item:nth-child(2) {
-        grid-column: 2 / 3;
-        grid-row: 1 / 2;
-        height: 300px;
-        background-color: #E0FFF0;
-        border: 1px solid #98FB98;
-    }
+.inspection-grid-item:nth-child(2) {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    height: 300px;
+    background-color: #E0FFF0;
+    border: 1px solid #98FB98;
+}
 
-    /* Left column, middle (Calendar) */
-    .grid-item:nth-child(3) {
-        grid-column: 1 / 2;
-        grid-row: 2 / 3;
-        background-color: #FFF0F5;
-        border: 1px solid #FFB6C1;
-    }
+.inspection-grid-item:nth-child(3) {
+    grid-column: 1 / 2;
+    grid-row: 2 / 3;
+    background-color: #FFF0F5;
+    border: 1px solid #FFB6C1;
+}
 
-    /* Right column, middle and bottom (Inspections and diseases) */
-    .grid-item:nth-child(4) {
-        grid-column: 2 / 3;
-        grid-row: 2 / 2;
-        background-color: #F0F8FF;
-        border: 1px solid #87CEFA;
-    }
+.inspection-grid-item:nth-child(4) {
+    grid-column: 2 / 3;
+    grid-row: 2 / 3;
+    background-color: #F0F8FF;
+    border: 1px solid #87CEFA;
+}
 
-
-.gird-map-calendar {
+.inspection-grid-map-calendar {
     display: flex;
     width: auto;
 }
 
-.form-control {
+.inspection-form-control {
     width: 100%;
     padding: 10px;
     margin-bottom: 15px;
@@ -68,32 +63,36 @@
     border-radius: 4px;
 }
 
-#hiveContainer {
+.inspection-hive-container {
     display: flex;
     flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
     gap: 10px;
     margin-bottom: 15px;
+    min-height: 150px; /* Adjust this value as needed */
 }
 
-.hive-button {
+.inspection-hive-button {
     background-color: #FFD700;
     border: none;
     padding: 10px;
     cursor: pointer;
     border-radius: 5px;
+    flex: 0 0 auto;
 }
 
-    .hive-button.selected {
-        background-color: #FFA500;
-    }
+.inspection-hive-button.selected {
+    background-color: #FFA500;
+}
 
-.hive-navigation {
+.inspection-hive-navigation {
     display: flex;
     justify-content: space-between;
     margin-top: 10px;
 }
 
-.btn {
+.inspection-btn {
     padding: 10px 15px;
     border: none;
     border-radius: 5px;
@@ -101,19 +100,14 @@
     display: inline-block;
 }
 
-.btn-secondary {
+.inspection-btn-secondary {
     background-color: #6c757d;
     color: white;
 }
 
-.btn:disabled {
+.inspection-btn:disabled {
     opacity: 0.5;
     cursor: not-allowed;
-}
-
-.inspection-data {
-    justify-content: center;
-    align-items: center;
 }
 
 .inspection-button {
@@ -127,7 +121,7 @@
     margin-top: 15px;
 }
 
-.disease-image-placeholder {
+.inspection-disease-image-placeholder {
     background-color: #ddd;
     height: 100px;
     display: flex;
@@ -136,7 +130,7 @@
     margin: 10px 0;
 }
 
-.modal {
+.inspection-modal {
     position: fixed;
     top: 0;
     left: 0;
@@ -149,7 +143,7 @@
     z-index: 1000;
 }
 
-.modal-content-inspect {
+.inspection-modal-content {
     background-color: #FFFFE0;
     padding: 30px;
     width: 90%;
@@ -160,150 +154,130 @@
     overflow-y: auto;
 }
 
-.modal-content h2 {
+.inspection-modal-content h2 {
     text-align: center;
     margin-bottom: 20px;
     color: #333;
 }
 
-
-
-.form-group {
+.inspection-form-group {
     margin-bottom: 15px;
 }
 
-    .form-group label {
-        display: block;
-        margin-bottom: 5px;
-        font-weight: bold;
-    }
-
-    .form-group select,
-    .form-group input[type="text"],
-    .form-group textarea {
-        width: 90%;
-        padding: 8px;
-        border: 1px solid #DEB887;
-        border-radius: 4px;
-        background-color: #FFF8DC;
-        min-width: auto;
-    }
-
-    .form-group textarea {
-        height: 50px;
-        resize: vertical;
-    }
-
-
-
-.button-title {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2px;
+.inspection-form-group label {
     display: block;
-    width: auto;
-    text-align: end;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-
-.button-group {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 2px;
-    display: block;
-    width: auto;
-    text-align: center;
-}
-
-    .button-group button {
-        padding: 10px 10px;
-        margin-left: 10px;
-        border: none;
-        border-radius: 4px;
-        cursor: pointer;
-        background-color: #28a745;
-        color: white;
-    }
-
-        .button-group button:first-child {
-            background-color: #6c757d;
-            color: white;
-        }
-
-        .button-group button:last-child {
-            background-color: #28a745;
-            color: white;
-        }
-
-.disease-entry {
-    border: 1px solid #DEB887;
-    padding: 15px;
-    margin-bottom: 15px;
-    border-radius: 4px;
-    max-height:auto;
-
-}
-
-:root {
-    --width: 100%;
-}
-.Calendar-root {
-    width:var;
-}
-
-.form-group-broodFrames,
-.form-group-broodPattern,
-.form-group-honeyFrames,
-.form-group-honeyPattern,
-.form-group-eggFrame,
-.form-group-eggPattern,
-.form-group-emptyFrames,
-.form-group-temperament,
-.form-group-comments {
-    width: 95%;
+.inspection-form-group select,
+.inspection-form-group input[type="text"],
+.inspection-form-group textarea {
+    width: 90%;
     padding: 8px;
     border: 1px solid #DEB887;
     border-radius: 4px;
     background-color: #FFF8DC;
     min-width: auto;
-    max-width: 1600px;
 }
 
-.form-group-disease,
-.form-group-sverity,
-.form-group-description {
+.inspection-form-group textarea {
+    height: 50px;
+    resize: vertical;
+}
+
+.inspection-button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2px;
+    width: auto;
+    text-align: center;
+}
+
+.inspection-button-group button {
+    padding: 10px 10px;
+    margin-left: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    background-color: #28a745;
+    color: white;
+}
+
+.inspection-button-group button:first-child {
+    background-color: #6c757d;
+    color: white;
+}
+
+.inspection-button-group button:last-child {
+    background-color: #28a745;
+    color: white;
+}
+
+.inspection-disease-entry {
     border: 1px solid #DEB887;
     padding: 15px;
     margin-bottom: 15px;
     border-radius: 4px;
 }
 
+.inspection-calendar {
+    width: 100%;
+    max-width: 100%;
+    max-height: 230px;
+}
 
-.header {
+.inspection-calendar-container {
+    max-width: 100%;
+    overflow: hidden;
+}
+.inspection-calendar__tile {
+    padding: 1px;
+    max-width: 35px;
+    line-height: 15px;
+}
+
+.inspection-header {
     background-color: #FFFFE0;
     padding: 20px;
     text-align: center;
 }
 
-.footer {
+.inspection-footer {
     background-color: #FFFFE0;
     text-align: center;
     padding: 10px;
 }
 
-.grid-Map-location {
+.inspection-map-location {
     display: block;
     width: 100%;
 }
 
-.grid-inspection-location {
+.inspection-location {
     display: block;
     width: 100%;
 }
 
+.inspection-navigation {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
 
+.inspection-navigation button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
 
-
+.inspection-navigation button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
 
 /* Responsive design */
 @media (max-width: 768px) {
@@ -312,62 +286,43 @@
         grid-template-rows: auto auto auto auto auto;
     }
 
-    .grid-item:nth-child(1),
-    .grid-item:nth-child(2),
-    .grid-item:nth-child(3),
-    .grid-item:nth-child(4) {
+    .inspection-grid-item:nth-child(1),
+    .inspection-grid-item:nth-child(2),
+    .inspection-grid-item:nth-child(3),
+    .inspection-grid-item:nth-child(4) {
         grid-column: 1 / 2;
         height: auto;
     }
 
-    .grid-item:nth-child(1) {
+    .inspection-grid-item:nth-child(1) {
         grid-row: 1 / 2;
     }
 
-    .grid-item:nth-child(2) {
+    .inspection-grid-item:nth-child(2) {
         grid-row: 2 / 3;
     }
 
-    .grid-item:nth-child(3) {
+    .inspection-grid-item:nth-child(3) {
         grid-row: 3 / 4;
     }
 
-    .grid-item:nth-child(4) {
+    .inspection-grid-item:nth-child(4) {
         grid-row: 4 / 5;
     }
 
-    .modal-content-inspect {
+    .inspection-modal-content {
         width: 95%;
         padding: 20px;
     }
 }
 
-
 @media (min-width: 768px) {
-    .modal-content-inspect {
+    .inspection-modal-content {
         width: 100%;
         padding: 15px;
     }
 
-    .react-calendar {
-        width: 100%;
-        max-width: 100%;
-        max-height: 230px;
-    }
-
-    .calendar-container {
-        align-items: center;
-        padding: 1px;
-    }
-    .react-calendar__tile {
-        padding: 1px;
-    }
-    .react-calendar__tile {
-        max-width: 35px;
-        line-height: 15px;
-    }
-
-    .from-showInspect {
+    .inspection-form-layout {
         display: grid;
         grid-template-columns: 1fr 1fr;
         grid-auto-columns: auto auto;
@@ -375,125 +330,37 @@
         grid-column-gap: 5px;
         grid-template-areas:
             "header header"
-            "form-group-broodFrames form-group-broodPattern"
-            "form-group-honeyFrames form-group-honeyPattern"
-            "form-group-eggFrame form-group-eggPattern"
-            "form-group-temperament form-group-emptyFrames"
-            "form-group-comments form-group-comments"
-            ".  footer";
+            "brood-frames brood-pattern"
+            "honey-frames honey-pattern"
+            "egg-frames egg-pattern"
+            "temperament empty-frames"
+            "comments comments"
+            "footer footer";
     }
 
-    .grid-map-clander {
+    .inspection-grid-map-calendar {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        grid-auto-columns: 50% 50%;
-        grid-template-rows: auto;
-        grid-column-gap: 5px;
-        grid-template-areas:
-            "grid-Map-location grid-inspection-location"
+        grid-gap: 10px;
+        height: 100%;
     }
 
-
-    .from-showDis {
+    .inspection-disease-form {
         display: grid;
         grid-template-columns: 1fr;
         grid-template-rows: auto;
         gap: 5px;
     }
 
-    .from-addDis {
+    .inspection-disease-entry-form {
         display: grid;
         grid-template-columns: 1fr 2fr 1fr;
         grid-auto-columns: auto auto auto;
         grid-template-rows: auto;
         grid-column-gap: 5px;
         grid-template-areas:
-            "form-group-disease form-group-description ."
-            "form-group-sverity form-group-description form-group-remove"
-            "form-group-add . ." ;
+            "disease description ."
+            "severity description remove"
+            "add . .";
     }
-
-    .form-row {
-        flex-direction: column;
-    }
-
-    .disease-entry {
-        flex-direction: column;
-        display: flex;
-    }
-
-
-    .header {
-        grid-area: header;
-    }
-
-    .grid-Map-location {
-        grid-area: grid-Map-location;
-    }
-
-    .grid-inspection-location {
-        grid-area: grid-inspection-location;
-    }
-
-    .footer {
-        grid-area: footer;
-    }
-
-    .form-group-add {
-        grid-area: form-group-add;
-    }
-
-    .form-group-broodFrames {
-        grid-area: form-group-broodFrames;
-    }
-
-    .form-group-broodPattern {
-        grid-area: form-group-broodPattern;
-    }
-
-    .form-group-honeyFrames {
-        grid-area: form-group-honeyFrames;
-    }
-
-    .form-group-honeyPattern {
-        grid-area: form-group-honeyPattern;
-    }
-
-    .form-group-eggFrame {
-        grid-area: form-group-eggFrame;
-    }
-
-    .form-group-eggPattern {
-        grid-area: form-group-eggPattern;
-    }
-
-    .form-group-emptyFrames {
-        grid-area: form-group-emptyFrames;
-    }
-
-    .form-group-temperament {
-        grid-area: form-group-temperament;
-    }
-
-    .form-group-comments {
-        grid-area: form-group-comments;
-    }
-
-    .form-group-disease {
-        grid-area: form-group-disease;
-    }
-
-    .form-group-sverity {
-        grid-area: form-group-sverity;
-    }
-
-    .form-group-description {
-        grid-area: form-group-description;
-    }
-
-    .form-group-remove {
-        grid-area: form-group-remove;
-    }
-
- 
 }

@@ -46,22 +46,18 @@ const Inspections: React.FC = () => {
     const [selectedHive, setSelectedHive] = useState<Hive | null>(null);
     const [inspections, setInspections] = useState<Inspection[]>([]);
     const [diseases, setDiseases] = useState<Disease[]>([]);
-    const [photography, setPhotography] = useState<Photography[]>([]);
     const [selectedDate, setSelectedDate] = useState<Date>(new Date());
     const [currentPage, setCurrentPage] = useState(1);
     const [totalHives, setTotalHives] = useState(0);
     const [isLoading, setIsLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
-    const hivesPerPage = 9;
-
-    // New state for modals
     const [showInspectionModal, setShowInspectionModal] = useState(false);
     const [showDiseasesModal, setShowDiseasesModal] = useState(false);
-    const [showPhotographyModal, setShowPhotographyModal] = useState(false);
     const [newInspection, setNewInspection] = useState<Partial<Inspection>>({});
     const [newDiseases, setNewDiseases] = useState<Partial<Disease>[]>([{}]);
-    const [newPhotography, setNewPhotography] = useState<Partial<Photography>[]>([{}]);
     const [lastAddedInspectionId, setLastAddedInspectionId] = useState<number | null>(null);
+    const [currentInspectionIndex, setCurrentInspectionIndex] = useState(0);
+    const hivesPerPage = 9;
 
     useEffect(() => {
         fetchApiaries();
@@ -142,6 +138,7 @@ const Inspections: React.FC = () => {
             }
             const data = await response.json();
             setInspections(data);
+            setCurrentInspectionIndex(0);
             if (data.length > 0) {
                 fetchDiseases(data[0].inspectionId);
             }
@@ -194,18 +191,9 @@ const Inspections: React.FC = () => {
         }
     };
 
-
-
     const handleGoInspectionModal_D = () => {
         setShowInspectionModal(false);
         setShowDiseasesModal(true);
-        setShowPhotographyModal(false);
-    };
-
-    const handleGoInspectionModal_P = () => {
-        setShowInspectionModal(false);
-        setShowPhotographyModal(true);
-        setShowDiseasesModal(false);
     };
 
     const handleBackInspectionModal_D = () => {
@@ -213,19 +201,8 @@ const Inspections: React.FC = () => {
         setShowDiseasesModal(false);
     };
 
-    const handleBackInspectionModal_P = () => {
-        setShowInspectionModal(true);
-        setShowPhotographyModal(false);
-    };
-
-
     const handleCloseInspectionModal = () => {
         setShowInspectionModal(false);
-        setNewInspection({});
-    };
-
-    const handleCloseInspectionModal_P = () => {
-        setShowPhotographyModal(false);
         setNewInspection({});
     };
 
@@ -233,7 +210,6 @@ const Inspections: React.FC = () => {
         setShowDiseasesModal(false);
         setNewInspection({});
     };
-
 
     const handleInspectionInputChange = (event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
         const { name, value } = event.target;
@@ -256,7 +232,6 @@ const Inspections: React.FC = () => {
                 setLastAddedInspectionId(addedInspection.inspectionId);
                 setShowInspectionModal(false);
                 setShowDiseasesModal(true);
-                setShowPhotographyModal(true);
                 if (selectedHive) {
                     fetchInspections(selectedHive.hiveId, selectedDate);
                 }
@@ -272,11 +247,6 @@ const Inspections: React.FC = () => {
     const handleCloseDiseasesModal = () => {
         setShowDiseasesModal(false);
         setNewDiseases([{}]);
-    };
-
-    const handleClosePhotographyModal = () => {
-        setShowPhotographyModal(false);
-        setNewPhotography([{}]);
     };
 
     const handleDiseaseInputChange = (index: number, event: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
@@ -300,7 +270,7 @@ const Inspections: React.FC = () => {
         }
         try {
             for (const disease of newDiseases) {
-                if (!disease.diseaseName) continue; // Skip empty disease entries
+                if (!disease.diseaseName) continue;
 
                 const diseaseToSubmit = {
                     ...disease,
@@ -336,6 +306,20 @@ const Inspections: React.FC = () => {
         }
     };
 
+    const handleLastInspection = () => {
+        if (currentInspectionIndex < inspections.length - 1) {
+            setCurrentInspectionIndex(prevIndex => prevIndex + 1);
+            fetchDiseases(inspections[currentInspectionIndex + 1].inspectionId);
+        }
+    };
+
+    const handleNextInspection = () => {
+        if (currentInspectionIndex > 0) {
+            setCurrentInspectionIndex(prevIndex => prevIndex - 1);
+            fetchDiseases(inspections[currentInspectionIndex - 1].inspectionId);
+        }
+    };
+
     if (isLoading) {
         return <div className="inspections-container"><div className="loading">Loading...</div></div>;
     }
@@ -346,10 +330,10 @@ const Inspections: React.FC = () => {
 
     return (
         <div className="inspections-container">
-            <div className="grid-item">
+            <div className="inspection-grid-item">
                 <h4>Select Apiary</h4>
                 <select
-                    className="form-control"
+                    className="inspection-form-control"
                     onChange={handleApiaryChange}
                     value={selectedApiaryId || ''}
                 >
@@ -361,27 +345,27 @@ const Inspections: React.FC = () => {
                     ))}
                 </select>
                 <h4>List of Hives</h4>
-                <div id="hiveContainer">
+                <div className="inspection-hive-container">
                     {hives.map((hive) => (
                         <button
                             key={hive.hiveId}
-                            className={`hive-button ${selectedHive?.hiveId === hive.hiveId ? 'selected' : ''}`}
+                            className={`inspection-hive-button ${selectedHive?.hiveId === hive.hiveId ? 'selected' : ''}`}
                             onClick={() => handleHiveClick(hive)}
                         >
                             {hive.hiveNumber}
                         </button>
                     ))}
                 </div>
-                <div className="hive-navigation">
+                <div className="inspection-hive-navigation">
                     <button
-                        className="btn btn-secondary"
+                        className="inspection-btn inspection-btn-secondary"
                         onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                         disabled={currentPage === 1}
                     >
                         Previous
                     </button>
                     <button
-                        className="btn btn-secondary"
+                        className="inspection-btn inspection-btn-secondary"
                         onClick={() => setCurrentPage(prev => prev + 1)}
                         disabled={currentPage * hivesPerPage >= totalHives}
                     >
@@ -390,61 +374,46 @@ const Inspections: React.FC = () => {
                 </div>
             </div>
 
-
-
-            <div className="grid-item map-container">
-                <div className="grid-map-clander">
-                    <div className="grid-Map-location">
+            <div className="inspection-grid-item inspection-map-container">
+                <div className="inspection-grid-map-calendar">
+                    <div className="inspection-map-location">
                         <h4>Three Bee Apiaries</h4>
                         <p>Map placeholder - Apiary locations would be shown here</p>
                     </div>
 
-                    <div className="grid-inspection-location">
-
+                    <div className="inspection-location">
                         <h4>Select Date & Time</h4>
-                        <div className="calendar">
-                            <Calendar styles="width=50%"
+                        <div className="inspection-calendar-container">
+                            <Calendar
                                 onChange={handleDateChange}
                                 value={selectedDate}
-                            /></div>
-                        <div className="button-group">
+                                className="inspection-calendar"
+                            />
+                        </div>
+                        <div className="inspection-button-group">
                             <button className="inspection-button" onClick={handleInspectionClick}>View</button>
-                            <button className="inspection-button" onClick={handleInspectionClick}>Create </button>
+                            <button className="inspection-button" onClick={handleInspectionClick}>Create</button>
                         </div>
                     </div>
-
                 </div>
             </div>
 
-
-
-            <div className="grid-item ">
-
-                <h4>Flowering</h4>
-
+            <div className="inspection-grid-item">
+                <h4>Flora</h4>
             </div>
 
-
-
-            <div className="grid-item inspection-details">
-                <div >
-                    <h4>{selectedHive ? `${selectedHive.hiveNumber} Inspection Summary` : 'Select a hive'}</h4>
-                    <div className="button-group">
-                        <button className="inspection-button" onClick={handleInspectionClick}>Last</button>
-                        <button className="inspection-button" onClick={handleInspectionClick}>Next</button>
-                    </div>
-                </div>
-
+            <div className="inspection-grid-item inspection-details">
+                <h4>{selectedHive ? `${selectedHive.hiveNumber} Inspection Summary` : 'Select a hive'}</h4>
                 {selectedHive && inspections.length > 0 && (
                     <div>
-                        <p>Last Inspection: {new Date(inspections[0].inspectionDate).toLocaleDateString()}</p>
-                        <p>Next Inspection: {new Date(inspections[0].nextInspectionDate).toLocaleDateString()}</p>
-                        <p>Brood: {inspections[0].broodFrames} {inspections[0].broodPattern} Frames</p>
-                        <p>Honey: {inspections[0].honeyFrames} {inspections[0].honeyPattern} Frames</p>
-                        <p>Eggs: {inspections[0].eggFrames} {inspections[0].eggPattern} Frames</p>
-                        <p>Empty: {inspections[0].emptyFrames} Frames</p>
-                        <p>Temperament: {inspections[0].temperament}</p>
-                        <p>Comments: {inspections[0].comments}</p>
+                        <p>Inspection Date: {new Date(inspections[currentInspectionIndex].inspectionDate).toLocaleDateString()}</p>
+                        <p>Next Inspection: {new Date(inspections[currentInspectionIndex].nextInspectionDate).toLocaleDateString()}</p>
+                        <p>Brood: {inspections[currentInspectionIndex].broodFrames} {inspections[currentInspectionIndex].broodPattern} Frames</p>
+                        <p>Honey: {inspections[currentInspectionIndex].honeyFrames} {inspections[currentInspectionIndex].honeyPattern} Frames</p>
+                        <p>Eggs: {inspections[currentInspectionIndex].eggFrames} {inspections[currentInspectionIndex].eggPattern} Frames</p>
+                        <p>Empty: {inspections[currentInspectionIndex].emptyFrames} Frames</p>
+                        <p>Temperament: {inspections[currentInspectionIndex].temperament}</p>
+                        <p>Comments: {inspections[currentInspectionIndex].comments}</p>
                     </div>
                 )}
                 <h4>{selectedHive ? `${selectedHive.hiveNumber} Diseases` : ''}</h4>
@@ -452,189 +421,183 @@ const Inspections: React.FC = () => {
                     <div key={disease.diseaseId}>
                         <p>Disease {index + 1}: {disease.diseaseName}</p>
                         <p>Severity: {disease.severity}</p>
-                        <div className="disease-image-placeholder">
+                        <div className="inspection-disease-image-placeholder">
                             {disease.imageUrl ? <img src={disease.imageUrl} alt={disease.diseaseName} /> : <p>&lt;IMAGE&gt;</p>}
                         </div>
                         <p>Comment: {disease.description}</p>
                     </div>
                 ))}
+                <div className="inspection-navigation">
+                    <button
+                        onClick={handleLastInspection}
+                        disabled={currentInspectionIndex >= inspections.length - 1}
+                    >
+                        Last
+                    </button>
+                    <button
+                        onClick={handleNextInspection}
+                        disabled={currentInspectionIndex <= 0}
+                    >
+                        Next
+                    </button>
+                </div>
             </div>
 
             {showInspectionModal && (
-                <div className="modal">
-                    <div className="modal-content-inspect">
-                        <div className="from-showInspect">
-                            <div className="header">
+                <div className="inspection-modal">
+                    <div className="inspection-modal-content">
+                        <div className="inspection-form-layout">
+                            <div className="inspection-header">
                                 <h2>HIVE #{selectedHive?.hiveNumber} INSPECTION</h2>
                             </div>
                         </div>
                         <form onSubmit={handleSubmitInspection}>
-                            <div className="from-showInspect">
-                                <div className="form-group-broodFrames">
-                                    <div className="form-group">
-                                        <label htmlFor="broodFrames">Brood Frames</label>
-                                        <select
-                                            id="broodFrames"
-                                            name="broodFrames"
-                                            value={newInspection.broodFrames || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select brood frame quantity</option>
-                                            {[0, 1, 2, 3, 4, 5].map(num => (
-                                                <option key={num} value={num}>{num}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                            <div className="inspection-form-layout">
+                                <div className="inspection-form-group brood-frames">
+                                    <label htmlFor="broodFrames">Brood Frames</label>
+                                    <select
+                                        id="broodFrames"
+                                        name="broodFrames"
+                                        value={newInspection.broodFrames || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select brood frame quantity</option>
+                                        {[0, 1, 2, 3, 4, 5].map(num => (
+                                            <option key={num} value={num}>{num}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
-
-                                <div className="form-group-broodPattern">
-                                    <div className="form-group">
-                                        <label htmlFor="broodPattern">Brood Pattern</label>
-                                        <select
-                                            id="broodPattern"
-                                            name="broodPattern"
-                                            value={newInspection.broodPattern || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select brood pattern</option>
-                                            <option value="Excellent">Excellent</option>
-                                            <option value="Good">Good</option>
-                                            <option value="Fair">Fair</option>
-                                            <option value="Poor">Poor</option>
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group brood-pattern">
+                                    <label htmlFor="broodPattern">Brood Pattern</label>
+                                    <select
+                                        id="broodPattern"
+                                        name="broodPattern"
+                                        value={newInspection.broodPattern || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select brood pattern</option>
+                                        <option value="Excellent">Excellent</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Fair">Fair</option>
+                                        <option value="Poor">Poor</option>
+                                    </select>
                                 </div>
 
-                                <div className="form-group-honeyFrames">
-                                    <div className="form-group">
-                                        <label htmlFor="honeyFrames">Honey Frames</label>
-                                        <select
-                                            id="honeyFrames"
-                                            name="honeyFrames"
-                                            value={newInspection.honeyFrames || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select honey frame quantity</option>
-                                            {[0, 1, 2, 3, 4, 5].map(num => (
-                                                <option key={num} value={num}>{num}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group honey-frames">
+                                    <label htmlFor="honeyFrames">Honey Frames</label>
+                                    <select
+                                        id="honeyFrames"
+                                        name="honeyFrames"
+                                        value={newInspection.honeyFrames || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select honey frame quantity</option>
+                                        {[0, 1, 2, 3, 4, 5].map(num => (
+                                            <option key={num} value={num}>{num}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
-                                <div className="form-group-honeyPattern">
-                                    <div className="form-group">
-                                        <label htmlFor="honeyPattern">Honey Pattern</label>
-                                        <select
-                                            id="honeyPattern"
-                                            name="honeyPattern"
-                                            value={newInspection.honeyPattern || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select honey pattern</option>
-                                            <option value="Full">Full</option>
-                                            <option value="Partial">Partial</option>
-                                            <option value="Empty">Empty</option>
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group honey-pattern">
+                                    <label htmlFor="honeyPattern">Honey Pattern</label>
+                                    <select
+                                        id="honeyPattern"
+                                        name="honeyPattern"
+                                        value={newInspection.honeyPattern || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select honey pattern</option>
+                                        <option value="Full">Full</option>
+                                        <option value="Partial">Partial</option>
+                                        <option value="Empty">Empty</option>
+                                    </select>
                                 </div>
 
-                                <div className="form-group-eggFrame">
-                                    <div className="form-group">
-                                        <label htmlFor="eggFrames">Egg Frames</label>
-                                        <select
-                                            id="eggFrames"
-                                            name="eggFrames"
-                                            value={newInspection.eggFrames || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select egg frame quantity</option>
-                                            {[0, 1, 2, 3, 4, 5].map(num => (
-                                                <option key={num} value={num}>{num}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group egg-frames">
+                                    <label htmlFor="eggFrames">Egg Frames</label>
+                                    <select
+                                        id="eggFrames"
+                                        name="eggFrames"
+                                        value={newInspection.eggFrames || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select egg frame quantity</option>
+                                        {[0, 1, 2, 3, 4, 5].map(num => (
+                                            <option key={num} value={num}>{num}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
-                                <div className="form-group-eggPattern">
-                                    <div className="form-group">
-                                        <label htmlFor="eggPattern">Egg Pattern</label>
-                                        <select
-                                            id="eggPattern"
-                                            name="eggPattern"
-                                            value={newInspection.eggPattern || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select egg pattern</option>
-                                            <option value="Excellent">Excellent</option>
-                                            <option value="Good">Good</option>
-                                            <option value="Fair">Fair</option>
-                                            <option value="Poor">Poor</option>
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group egg-pattern">
+                                    <label htmlFor="eggPattern">Egg Pattern</label>
+                                    <select
+                                        id="eggPattern"
+                                        name="eggPattern"
+                                        value={newInspection.eggPattern || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select egg pattern</option>
+                                        <option value="Excellent">Excellent</option>
+                                        <option value="Good">Good</option>
+                                        <option value="Fair">Fair</option>
+                                        <option value="Poor">Poor</option>
+                                    </select>
                                 </div>
 
-                                <div className="form-group-emptyFrames">
-                                    <div className="form-group">
-                                        <label htmlFor="emptyFrames">Empty Frames</label>
-                                        <select
-                                            id="emptyFrames"
-                                            name="emptyFrames"
-                                            value={newInspection.emptyFrames || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select empty frame quantity</option>
-                                            {[0, 1, 2, 3, 4, 5].map(num => (
-                                                <option key={num} value={num}>{num}</option>
-                                            ))}
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group empty-frames">
+                                    <label htmlFor="emptyFrames">Empty Frames</label>
+                                    <select
+                                        id="emptyFrames"
+                                        name="emptyFrames"
+                                        value={newInspection.emptyFrames || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select empty frame quantity</option>
+                                        {[0, 1, 2, 3, 4, 5].map(num => (
+                                            <option key={num} value={num}>{num}</option>
+                                        ))}
+                                    </select>
                                 </div>
 
-                                <div className="form-group-temperament">
-                                    <div className="form-group">
-                                        <label htmlFor="temperament">Temperament</label>
-                                        <select
-                                            id="temperament"
-                                            name="temperament"
-                                            value={newInspection.temperament || ''}
-                                            onChange={handleInspectionInputChange}
-                                            required
-                                        >
-                                            <option value="">Select temperament</option>
-                                            <option value="Calm">Calm</option>
-                                            <option value="Nervous">Nervous</option>
-                                            <option value="Aggressive">Aggressive</option>
-                                        </select>
-                                    </div>
+                                <div className="inspection-form-group temperament">
+                                    <label htmlFor="temperament">Temperament</label>
+                                    <select
+                                        id="temperament"
+                                        name="temperament"
+                                        value={newInspection.temperament || ''}
+                                        onChange={handleInspectionInputChange}
+                                        required
+                                    >
+                                        <option value="">Select temperament</option>
+                                        <option value="Calm">Calm</option>
+                                        <option value="Nervous">Nervous</option>
+                                        <option value="Aggressive">Aggressive</option>
+                                    </select>
                                 </div>
 
-                                <div className="form-group-comments">
-                                    <div className="form-group">
-                                        <label htmlFor="comments">Comment</label>
-                                        <textarea
-                                            id="comments"
-                                            name="comments"
-                                            value={newInspection.comments || ''}
-                                            onChange={handleInspectionInputChange}
-                                            placeholder="Enter a comment about your hive"
-                                        ></textarea>
-                                    </div>
+                                <div className="inspection-form-group comments">
+                                    <label htmlFor="comments">Comment</label>
+                                    <textarea
+                                        id="comments"
+                                        name="comments"
+                                        value={newInspection.comments || ''}
+                                        onChange={handleInspectionInputChange}
+                                        placeholder="Enter a comment about your hive"
+                                    ></textarea>
                                 </div>
 
-                                <div className="footer">
-                                    <div className="button-group">
+                                <div className="inspection-footer">
+                                    <div className="inspection-button-group">
                                         <button type="button" onClick={handleCloseInspectionModal}>CANCEL</button>
                                         <button type="button" onClick={handleGoInspectionModal_D}>Disease</button>
-                                        <button type="button" onClick={handleGoInspectionModal_P}>Photography</button>
                                         <button type="submit">SUBMIT</button>
                                     </div>
                                 </div>
@@ -642,152 +605,89 @@ const Inspections: React.FC = () => {
                         </form>
                     </div>
                 </div>
+            )}
 
-            )
-            }
-
-            {
-                showDiseasesModal && (
-                    <div className="modal">
-                        <div className="modal-content-inspect">
-                            <div className="header">
-                                <h2>HIVE #{selectedHive?.hiveNumber} DISEASES</h2>
-                            </div>
-                            <div className="from-showDis">
-                                <div className="form-row">
-                                    <form onSubmit={handleSubmitDiseases}>
-                                        {newDiseases.map((disease, index) => (
-                                            <div key={index} className="disease-entry">
-                                                <div className="from-addDis">
-                                                    <div className="form-group-disease">
-                                                        <div className="form-group">
-                                                            <label htmlFor={`disease-${index}`}>Disease #{index + 1}</label>
-                                                            <select
-                                                                id={`disease-${index}`}
-                                                                name="diseaseName"
-                                                                value={disease.diseaseName || ''}
-                                                                onChange={(e) => handleDiseaseInputChange(index, e)}
-                                                                required
-                                                            >
-                                                                <option value="">Select disease observed</option>
-                                                                <option value="Varroa Mites">Varroa Mites</option>
-                                                                <option value="American Foulbrood">American Foulbrood</option>
-                                                                <option value="European Foulbrood">European Foulbrood</option>
-                                                                <option value="Nosema">Nosema</option>
-                                                                <option value="Chalkbrood">Chalkbrood</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="form-group-sverity">
-                                                        <div className="form-group">
-                                                            <label htmlFor={`severity-${index}`}>Severity</label>
-                                                            <select
-                                                                id={`severity-${index}`}
-                                                                name="severity"
-                                                                value={disease.severity || ''}
-                                                                onChange={(e) => handleDiseaseInputChange(index, e)}
-                                                                required
-                                                            >
-                                                                <option value="">Select severity</option>
-                                                                <option value="Low">Low</option>
-                                                                <option value="Medium">Medium</option>
-                                                                <option value="High">High</option>
-                                                                <option value="Critical">Critical</option>
-                                                            </select>
-                                                        </div>
-                                                    </div>
-
-
-                                                    <div className="form-group-description">
-                                                        <div className="form-group">
-                                                            <label htmlFor={`description-${index}`}>Description</label>
-                                                            <textarea
-                                                                id={`description-${index}`}
-                                                                name="description"
-                                                                value={disease.description || ''}
-                                                                onChange={(e) => handleDiseaseInputChange(index, e)}
-                                                                placeholder="Enter a description of the disease"
-                                                            ></textarea>
-                                                        </div>
-                                                    </div>
-                                                    {index > 0 && (
-                                                        <div className="form-group-remove">
-                                                            <div className="button-group">
-                                                                <button type="button" onClick={() => handleRemoveDisease(index)}>Remove</button>
-                                                            </div>
-                                                        </div>
-
-                                                    )}
-                                                    <div className="form-group-add">
-                                                        <div className="button-group">
-                                                            <button type="button" onClick={handleAddDisease}>Add More</button>
-                                                        </div>
-
-                                                    </div>
-                                                </div>
-
+            {showDiseasesModal && (
+                <div className="inspection-modal">
+                    <div className="inspection-modal-content">
+                        <div className="inspection-header">
+                            <h2>HIVE #{selectedHive?.hiveNumber} DISEASES</h2>
+                        </div>
+                        <div className="inspection-disease-form">
+                            <form onSubmit={handleSubmitDiseases}>
+                                {newDiseases.map((disease, index) => (
+                                    <div key={index} className="inspection-disease-entry">
+                                        <div className="inspection-disease-entry-form">
+                                            <div className="inspection-form-group disease">
+                                                <label htmlFor={`disease-${index}`}>Disease #{index + 1}</label>
+                                                <select
+                                                    id={`disease-${index}`}
+                                                    name="diseaseName"
+                                                    value={disease.diseaseName || ''}
+                                                    onChange={(e) => handleDiseaseInputChange(index, e)}
+                                                    required
+                                                >
+                                                    <option value="">Select disease observed</option>
+                                                    <option value="Varroa Mites">Varroa Mites</option>
+                                                    <option value="American Foulbrood">American Foulbrood</option>
+                                                    <option value="European Foulbrood">European Foulbrood</option>
+                                                    <option value="Nosema">Nosema</option>
+                                                    <option value="Chalkbrood">Chalkbrood</option>
+                                                </select>
                                             </div>
-                                        ))}
 
-                                        <div className="footer">
-                                            <div className="button-group">
-                                                <button type="button" onClick={handleCloseInspectionModal_D}>CANCEL</button>
-                                                <button type="button" onClick={handleBackInspectionModal_D}>Inspection</button>
-                                                <button type="button" onClick={handleGoInspectionModal_P}>Photography </button>
-                                                <button type="submit">SUBMIT</button>
+                                            <div className="inspection-form-group severity">
+                                                <label htmlFor={`severity-${index}`}>Severity</label>
+                                                <select
+                                                    id={`severity-${index}`}
+                                                    name="severity"
+                                                    value={disease.severity || ''}
+                                                    onChange={(e) => handleDiseaseInputChange(index, e)}
+                                                    required
+                                                >
+                                                    <option value="">Select severity</option>
+                                                    <option value="Low">Low</option>
+                                                    <option value="Medium">Medium</option>
+                                                    <option value="High">High</option>
+                                                    <option value="Critical">Critical</option>
+                                                </select>
+                                            </div>
+
+                                            <div className="inspection-form-group description">
+                                                <label htmlFor={`description-${index}`}>Description</label>
+                                                <textarea
+                                                    id={`description-${index}`}
+                                                    name="description"
+                                                    value={disease.description || ''}
+                                                    onChange={(e) => handleDiseaseInputChange(index, e)}
+                                                    placeholder="Enter a description of the disease"
+                                                ></textarea>
+                                            </div>
+                                            {index > 0 && (
+                                                <div className="inspection-form-group remove">
+                                                    <button type="button" onClick={() => handleRemoveDisease(index)}>Remove</button>
+                                                </div>
+                                            )}
+                                            <div className="inspection-form-group add">
+                                                <button type="button" onClick={handleAddDisease}>Add More</button>
                                             </div>
                                         </div>
-                                    </form>
+                                    </div>
+                                ))}
+
+                                <div className="inspection-footer">
+                                    <div className="inspection-button-group">
+                                        <button type="button" onClick={handleCloseInspectionModal_D}>CANCEL</button>
+                                        <button type="button" onClick={handleBackInspectionModal_D}>Inspection</button>
+                                        <button type="submit">SUBMIT</button>
+                                    </div>
                                 </div>
-                            </div>
+                            </form>
                         </div>
                     </div>
-
-
-                )
-            }
-
-            {/*Photography*/
-                showPhotographyModal && (
-                    <div className="modal">
-                        <div className="modal-content-inspect">
-                            <div className="header">
-                                <h2>HIVE #{selectedHive?.hiveNumber} DISEASES</h2>
-                            </div>
-                            <div className="from-showDis">
-                                <div className="form-row">
-                                    <form onSubmit={handleSubmitDiseases}>
-                                        {newDiseases.map((disease, index) => (
-                                            <div key={index} className="disease-entry">
-                                                <div className="from-addDis">
-
-
-
-                                                </div>
-
-                                            </div>
-                                        ))}
-
-                                        <div className="footer">
-                                            <div className="button-group">
-                                                <button type="button" onClick={handleCloseInspectionModal_P}>CANCEL</button>
-                                                <button type="button" onClick={handleBackInspectionModal_P}>Inspection</button>
-                                                <button type="button" onClick={handleGoInspectionModal_D}>Disease</button>
-                                                <button type="submit">SUBMIT</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-                )
-            }
-        </div >
-
+                </div>
+            )}
+        </div>
     );
 };
 

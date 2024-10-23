@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using AspNetCoreReactBeeAware.Server.Models;
 
+
 namespace AspNetCoreReactBeeAware.Server.Data
 {
     public class AppDbContext : DbContext
@@ -11,6 +12,8 @@ namespace AspNetCoreReactBeeAware.Server.Data
         public DbSet<Hive> Hives { get; set; }
         public DbSet<Inspection> Inspections { get; set; }
         public DbSet<Disease> Diseases { get; set; }
+
+        public DbSet<User> Users { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import './Layout.css';
 
 interface LayoutProps {
@@ -9,37 +10,54 @@ interface LayoutProps {
 const Layout: React.FC<LayoutProps> = ({ children }) => {
     const [showSubMenu, setShowSubMenu] = useState(false);
     const location = useLocation();
+    const navigate = useNavigate();
+    const { isAuthenticated, logout } = useAuth();
+
+    const handleLogout = () => {
+        logout();
+        navigate('/auth');
+    };
 
     return (
         <div className="main-container">
             <div className="top-navbar">
                 <div>Home</div>
-                <div>Logout</div>
+                {isAuthenticated ? (
+                    <div onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</div>
+                ) : (
+                    <Link to="/auth">Login</Link>
+                )}
             </div>
 
             <div className="main-content">
-                <div className="modules-navbar">
-                    <div className="module-item">
-                        <div className="module-icon"><i className="fas fa-bug"></i></div>
-                        <div className="module-label">Pests and Diseases</div>
+                {isAuthenticated && (
+                    <div className="modules-navbar">
+                        <div className="module-item">
+                            <div className="module-icon"><i className="fas fa-bug"></i></div>
+                            <div className="module-label">Pests and Diseases</div>
+                        </div>
+                        <div className="module-item">
+                            <div className="module-icon"><i className="fas fa-leaf"></i></div>
+                            <div className="module-label">Bee Flora</div>
+                        </div>
+                        <div className="module-item" onClick={() => setShowSubMenu(!showSubMenu)}>
+                            <div className="module-icon"><i className="fas fa-archive"></i></div>
+                            <div className="module-label">Beekeeping</div>
+                        </div>
+                        <div className="module-item">
+                            <div className="module-icon"><i className="fas fa-comments"></i></div>
+                            <div className="module-label">ChatRoom</div>
+                        </div>
+                        <div className="module-item">
+                            <div className="module-icon"><i className="fas fa-image"></i></div>
+                            <div className="module-label">Gallery</div>
+                        </div>
+                        <div className="module-item">
+                            <div className="module-icon"><i className="fas fa-user"></i></div>
+                            <div className="module-label">Account</div>
+                        </div>
                     </div>
-                    <div className="module-item">
-                        <div className="module-icon"><i className="fas fa-leaf"></i></div>
-                        <div className="module-label">Bee Flora</div>
-                    </div>
-                    <div className="module-item" onClick={() => setShowSubMenu(!showSubMenu)}>
-                        <div className="module-icon"><i className="fas fa-archive"></i></div>
-                        <div className="module-label">Beekeeping</div>
-                    </div>
-                    <div className="module-item">
-                        <div className="module-icon"><i className="fas fa-comments"></i></div>
-                        <div className="module-label">ChatRoom</div>
-                    </div>
-                    <div className="module-item">
-                        <div className="module-icon"><i className="fas fa-user"></i></div>
-                        <div className="module-label">Account</div>
-                    </div>
-                </div>
+                )}
 
                 <div className="right-content">
                     <div className="breadcrumb-container">
@@ -59,7 +77,7 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
                         )}
                     </div>
                     <div className="sub-content">
-                        {showSubMenu && (
+                        {isAuthenticated && showSubMenu && (
                             <div className="sub-navbar">
                                 <Link to="/beekeeping/apiaries" className={`sub-menu-item ${location.pathname === '/beekeeping/apiaries' ? 'active' : ''}`}>Apiaries</Link>
                                 <Link to="/beekeeping/hives" className={`sub-menu-item ${location.pathname === '/beekeeping/hives' ? 'active' : ''}`}>Hives</Link>
