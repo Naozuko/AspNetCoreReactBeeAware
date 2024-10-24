@@ -21,7 +21,6 @@ namespace AspNetCoreReactBeeAware.Controllers
         [HttpGet("apiaries")]
         public async Task<IActionResult> GetApiaries([FromQuery] int page = 1, [FromQuery] int pageSize = 6)
         {
-            _logger.LogInformation("GetApiaries method called with page: {Page}, pageSize: {PageSize}", page, pageSize);
             try
             {
                 var apiaries = await _context.Apiaries
@@ -31,13 +30,16 @@ namespace AspNetCoreReactBeeAware.Controllers
                     {
                         a.ApiaryId,
                         a.ApiaryName,
+                        a.Address,      
+                        a.ContactInfo,  
+                        a.Notes,
+                        a.Description,
                         HiveCount = _context.Hives.Count(h => h.ApiaryId == a.ApiaryId)
                     })
                     .ToListAsync();
 
                 var totalApiaries = await _context.Apiaries.CountAsync();
 
-                _logger.LogInformation("Retrieved {Count} apiaries", apiaries.Count);
                 return Ok(new
                 {
                     Apiaries = apiaries,
@@ -158,12 +160,14 @@ namespace AspNetCoreReactBeeAware.Controllers
 
                 if (date.HasValue)
                 {
-                    query = query.Where(i => i.InspectionDate.Date == date.Value.Date);
+                    // Compare only the date part, ignoring time
+                    var requestedDate = date.Value.Date;
+                    query = query.Where(i => i.InspectionDate.Date == requestedDate);
                 }
 
                 var inspections = await query.OrderByDescending(i => i.InspectionDate)
-                                             .Take(5)
-                                             .ToListAsync();
+                                           .Take(5)
+                                           .ToListAsync();
 
                 return Ok(inspections);
             }

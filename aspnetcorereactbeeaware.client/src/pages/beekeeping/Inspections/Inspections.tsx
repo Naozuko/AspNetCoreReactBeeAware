@@ -132,15 +132,20 @@ const Inspections: React.FC = () => {
 
     const fetchInspections = async (hiveId: number, date: Date) => {
         try {
-            const response = await fetch(`/api/beekeeping/inspections/${hiveId}?date=${date.toISOString()}`);
+            const isoDate = date.toISOString();
+            console.log(`Fetching inspections for hiveId: ${hiveId}, date: ${isoDate}`);
+            const response = await fetch(`/api/beekeeping/inspections/${hiveId}?date=${isoDate}`);
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             const data = await response.json();
+            console.log('Received inspections:', data);
             setInspections(data);
             setCurrentInspectionIndex(0);
             if (data.length > 0) {
                 fetchDiseases(data[0].inspectionId);
+            } else {
+                setDiseases([]);
             }
         } catch (error) {
             console.error('Error fetching inspections:', error);
@@ -173,8 +178,12 @@ const Inspections: React.FC = () => {
 
     const handleDateChange = (date: Date | Date[]) => {
         if (date instanceof Date) {
+            console.log('Selected date:', date);
             setSelectedDate(date);
             if (selectedHive) {
+
+                const isoDate = date.toISOString();
+                console.log('Fetching inspections for date:', isoDate);
                 fetchInspections(selectedHive.hiveId, date);
             }
         }
@@ -185,9 +194,10 @@ const Inspections: React.FC = () => {
             setShowInspectionModal(true);
             setNewInspection({
                 hiveId: selectedHive.hiveId,
-                inspectionDate: new Date().toISOString().split('T')[0],
-                nextInspectionDate: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+                inspectionDate: selectedDate.toISOString().split('T')[0],
+                nextInspectionDate: new Date(selectedDate.getTime() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
             });
+            console.log('Creating new inspection for date:', selectedDate.toISOString().split('T')[0]);
         }
     };
 

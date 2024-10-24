@@ -38,15 +38,15 @@ const ApiaryDetailModal: React.FC<{ apiary: Apiary | null, onClose: () => void }
 
     return (
         <div className="modal-overlay">
-            <div className="modal-content-apiaries  apiary-detail">
+            <div className="modal-content-apiaries apiary-detail">
                 <div className="apiary-detail-grid">
                     <div className="hives-section">
-
                         <div className="header-A">
                             <h3>Hives</h3>
                         </div>
-                        <div className="header-B"><h3><button className="edit-btn" >Edit</button></h3></div>
-
+                        <div className="header-B">
+                            <h3><button className="edit-btn">Edit</button></h3>
+                        </div>
 
                         <div className="apiary-hive">
                             <table>
@@ -72,20 +72,19 @@ const ApiaryDetailModal: React.FC<{ apiary: Apiary | null, onClose: () => void }
                             </div>
                         </div>
 
-
                         <div className="apiary-info">
                             <h3>{apiary.apiaryName}</h3>
-                            <p>Location: {apiary.address}</p>
-                            <p>Beekeeper contact: {apiary.contactInfo}</p>
-                            <p>Number of Hives: {apiary.hiveCount}</p>
-                            <p>Notes: {apiary.notes}</p>
-                            <p>Description: {apiary.description}</p>
+                            <p><strong>Location:</strong> {apiary.address ? apiary.address : 'Not specified'}</p>
+                            <p><strong>Contact Information:</strong> {apiary.contactInfo ? apiary.contactInfo : 'Not specified'}</p>
+                            <p><strong>Number of Hives:</strong> {apiary.hiveCount || 0}</p>
+                            <p><strong>Notes:</strong> {apiary.notes ? apiary.notes : 'No notes available'}</p>
+                            <p><strong>Description:</strong> {apiary.description ? apiary.description : 'No description available'}</p>
                         </div>
 
                         <div className="images-section">
                             <h3>Images</h3>
                             <div className="image-placeholder">
-                                <img src="/path/to/placeholder/image.jpg" alt="Apiary" />
+                                <span>Image placeholder</span>
                             </div>
                             <div className="image-navigation">
                                 <span>{'< 1 >'}</span>
@@ -93,12 +92,11 @@ const ApiaryDetailModal: React.FC<{ apiary: Apiary | null, onClose: () => void }
                         </div>
 
                         <div className="map-section">
-                            <h3>Map</h3>
+                            <h3>Location Map</h3>
                             <div className="map-placeholder">
-                                <img src="/path/to/map/image.jpg" alt="Location Map" />
+                                <span>Map placeholder</span>
                             </div>
                         </div>
-
 
                         <div className="footer">
                             <button onClick={onClose} className="close-btn">Close</button>
@@ -107,7 +105,6 @@ const ApiaryDetailModal: React.FC<{ apiary: Apiary | null, onClose: () => void }
                 </div>
             </div>
         </div>
-
     );
 };
 
@@ -144,6 +141,7 @@ const Apiaries: React.FC = () => {
                 throw new Error('Failed to fetch apiaries');
             }
             const data: ApiaryResponse = await response.json();
+            console.log('Fetched apiaries:', data.apiaries); 
             setApiaries(data.apiaries);
             setTotalPages(data.pageCount);
         } catch (err) {
@@ -158,20 +156,28 @@ const Apiaries: React.FC = () => {
         e.preventDefault();
         setError(null);
         try {
+
+            const apiaryToCreate = {
+                ...newApiary,
+                address: newApiary.address.trim(),
+                contactInfo: newApiary.contactInfo.trim(),
+                notes: newApiary.notes.trim(),
+                description: newApiary.description.trim()
+            };
+
             const response = await fetch('/api/beekeeping/apiaries', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify(newApiary),
+                body: JSON.stringify(apiaryToCreate),
             });
             if (!response.ok) {
                 const errorData = await response.text();
                 throw new Error(errorData || 'Failed to create apiary');
             }
-            const createdApiary = await response.json();
-            console.log('New apiary added:', createdApiary);
-            setApiaries(prev => [...prev, createdApiary]);
+
+            await fetchApiaries(currentPage);
             setShowAddModal(false);
             setNewApiary({
                 apiaryName: '',
@@ -254,12 +260,28 @@ const Apiaries: React.FC = () => {
             setEditingApiary(apiary);
         } else {
             try {
-                const response = await fetch(`/api/beekeeping/hives/${apiary.apiaryId}`);
-                if (!response.ok) {
+                console.log('Selected apiary before fetch:', apiary);
+                const hivesResponse = await fetch(`/api/beekeeping/hives/${apiary.apiaryId}`);
+                if (!hivesResponse.ok) {
                     throw new Error('Failed to fetch hives');
                 }
-                const hives = await response.json();
-                setSelectedApiary({ ...apiary, hives });
+                const hives = await hivesResponse.json();
+                console.log('Fetched hives:', hives);
+
+                // Create a complete apiary object with all fields
+                const completeApiary = {
+                    ...apiary,
+                    hives,
+                    // Use null coalescing to handle empty strings as well as null/undefined
+                    address: apiary.address?.trim() || '',
+                    contactInfo: apiary.contactInfo?.trim() || '',
+                    notes: apiary.notes?.trim() || '',
+                    description: apiary.description?.trim() || '',
+                    hiveCount: hives.length
+                };
+
+                console.log('Complete apiary object:', completeApiary); // Add this log
+                setSelectedApiary(completeApiary);
                 setShowDetailModal(true);
             } catch (err) {
                 console.error('Error fetching hives:', err);
@@ -379,8 +401,7 @@ const Apiaries: React.FC = () => {
                                 <div className="form-group-address">
                                     <div className="form-row">
                                         <div className="form-group">
-
-                                            <label htmlFor="address">Address</label>
+                                            <label htmlFor="address">Location</label>  
                                             <input
                                                 type="text"
                                                 id="address"
@@ -395,7 +416,7 @@ const Apiaries: React.FC = () => {
                                 <div className="form-group-contactInfo">
                                     <div className="form-row">
                                         <div className="form-group">
-                                            <label htmlFor="contactInfo">Property contact number & name</label>
+                                            <label htmlFor="contactInfo">Contact Information</label>  
                                             <input
                                                 type="text"
                                                 id="contactInfo"
@@ -531,7 +552,7 @@ const Apiaries: React.FC = () => {
                                     <div className="form-group-address">
                                         <div className="form-row">
                                             <div className="form-group">
-                                                <label htmlFor="address">Address</label>
+                                                <label htmlFor="address">Location</label>  
                                                 <input
                                                     type="text"
                                                     id="address"
@@ -547,7 +568,7 @@ const Apiaries: React.FC = () => {
                                     <div className="form-group-contactInfo">
                                         <div className="form-row">
                                             <div className="form-group">
-                                                <label htmlFor="contactInfo">Property contact number & name</label>
+                                                <label htmlFor="contactInfo">Contact Information</label> 
                                                 <input
                                                     type="text"
                                                     id="contactInfo"
